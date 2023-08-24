@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "bot-about-me"
+version = "0.0.1"
+description = "Telegram bot includes information about Me(Miroslav Kuzin)"
+authors = ["Miroslav Kuzin"]
+readme = "README.md"
+packages = [{include = "bot_about_me"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-telegram-bot = "^20.4"
+environs = "^9.5.0"
+aiofiles = "^23.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
