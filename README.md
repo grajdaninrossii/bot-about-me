@@ -13,7 +13,7 @@ In project used:
 - listen to my voice:
   * with a story in the format "I explain to my grandmother" what GPT is (up to 1 minute)
   * and explained the difference between SQL and NoSQL as briefly as possible (up to 1 minute)
-  * the story of first love (up to 1 minute) — you can invent 🤫
+  * the story of first love (up to 1 minute)
 - command that will allow us to get a link to a public repository with the sources of this bot.
 
 ## Link
