@@ -19,7 +19,7 @@ CONVERSATION_MENU_TEXT = '''
 '''
 
 LINK_BOT_REPOSITORY_TEXT = '''
-...
+Репозиторий данного бота на GitHub: https://github.com/grajdaninrossii/bot-about-me
 '''
 
 ABOUT_SELFI_TEXT = '''
