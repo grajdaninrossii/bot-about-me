@@ -10,15 +10,16 @@ VOICE_KEY="2"
 
 main_menu_buttons = [
     KeyboardButton(MainMenuButtonsText.SELFI),
-    KeyboardButton(MainMenuButtonsText.INFO),
+    KeyboardButton(MainMenuButtonsText.POST),
     KeyboardButton(MainMenuButtonsText.CODE),
+    KeyboardButton(MainMenuButtonsText.INFO),
     KeyboardButton(MainMenuButtonsText.HIGH_SCHOOL)
 ]
 
 main_menu_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        main_menu_buttons[:2],
-        main_menu_buttons[2:]
+        main_menu_buttons[:3],
+        main_menu_buttons[3:]
         ],
     resize_keyboard=True
 )

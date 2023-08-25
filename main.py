@@ -12,11 +12,19 @@ from handlers import (
     get_info,
     get_voice_story,
     back_main_menu,
-    error_voice_menu
+    error_voice_menu,
+    get_hobby_post
 )
 from keyboards import MAIN_MENU_KEY, VOICE_KEY
 from constants import StoryTypesButtonsText
-from filters import get_selfi_filter, get_photo_high_school_filter, get_bot_git_repo_filter, get_info_filter, all_text_filter
+from filters import (
+    get_selfi_filter,
+    get_photo_high_school_filter,
+    get_bot_git_repo_filter,
+    get_info_filter,
+    all_text_filter,
+    get_hobby_post_filter
+)
 
 
 def main() -> None:
@@ -46,6 +54,7 @@ def main() -> None:
                     MessageHandler(get_photo_high_school_filter, get_photo_high_school),
                     MessageHandler(get_bot_git_repo_filter, get_bot_git_repo),
                     MessageHandler(get_info_filter, get_info),
+                    MessageHandler(get_hobby_post_filter, get_hobby_post)
                 ],
             VOICE_KEY: [
                 CallbackQueryHandler(

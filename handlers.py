@@ -10,7 +10,8 @@ from constants import (
     LINK_BOT_REPOSITORY_TEXT,
     MAIN_MENU_TEXT,
     ABOUT_SELFI_TEXT,
-    ABOUT_HIGH_SCHOOL_PHOTO_TEXT
+    ABOUT_HIGH_SCHOOL_PHOTO_TEXT,
+    HOBBY_POST_TEXT
 )
 from constants import StoryTypesButtonsText
 from keyboards import main_menu_keyboard, voice_inline_keyboard
@@ -161,3 +162,15 @@ async def error_voice_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         reply_markup=ReplyKeyboardRemove()
         )
     return VOICE_KEY
+
+
+async def get_hobby_post(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    # Отправка голосового сообщения
+    async with aiofiles.open("files/hobby.png", 'rb') as fl:
+        await context.bot.send_photo(
+            chat_id= update.effective_chat.id,
+            photo=InputFile(await fl.read(), filename=None),
+            caption=HOBBY_POST_TEXT,
+            reply_markup=main_menu_keyboard
+            )
+    return MAIN_MENU_KEY
