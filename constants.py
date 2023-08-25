@@ -51,7 +51,6 @@ STORY_BUTTONS_TYPES = {
 }
 
 
-
 class MainMenuButtonsText(StrEnum):
     SELFI: str       = "Cелфи 🤳"
     INFO: str        = "Информация 💯"

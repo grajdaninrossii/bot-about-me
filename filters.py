@@ -1,6 +1,9 @@
 from telegram.ext import filters
 from constants import MainMenuButtonsText
 
+"""
+Фильтры для хэндлеров и коллбэков
+"""
 
 get_selfi_filter = filters.Regex(f'^{MainMenuButtonsText.SELFI}') | filters.Regex(f"^1$")
 get_photo_high_school_filter = filters.Regex(f'^{MainMenuButtonsText.HIGH_SCHOOL}') | filters.Regex(f"^2$")

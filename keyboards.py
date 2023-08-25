@@ -1,12 +1,15 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup # для универсальности версий
 from constants import MainMenuButtonsText, StoryTypesButtonsText
-'''
-В дальнейшем кнопки перейдут в директурию keyboards и разобются по файлам!
-'''
 
 # Ключи состояний
 MAIN_MENU_KEY="1"
 VOICE_KEY="2"
+
+'''
+Для каждой клавиатуры отдельно создается список кнопок,
+после создается объект клавиатуры в котором указываем расположения кнопок(меняем список кнопок по строкам)
+и указываем resize_keyboard=True, чтобы клавиатура стала меньше (ее размер адаптируется)
+'''
 
 main_menu_buttons = [
     KeyboardButton(MainMenuButtonsText.SELFI),
@@ -16,6 +19,7 @@ main_menu_buttons = [
     KeyboardButton(MainMenuButtonsText.HIGH_SCHOOL)
 ]
 
+# Клавиатура основного меню
 main_menu_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         main_menu_buttons[:3],
@@ -24,7 +28,6 @@ main_menu_keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-
 voice_menu_buttons = [
     InlineKeyboardButton(StoryTypesButtonsText.LOVE, callback_data=StoryTypesButtonsText.LOVE),
     InlineKeyboardButton(StoryTypesButtonsText.GPT, callback_data=StoryTypesButtonsText.GPT),
@@ -32,7 +35,7 @@ voice_menu_buttons = [
     InlineKeyboardButton(StoryTypesButtonsText.BACK_BUTTON_TEXT, callback_data=StoryTypesButtonsText.BACK_BUTTON_TEXT)
 ]
 
-
+# Встроенная клавиатура меню голосовых сообщений(войсов)
 voice_inline_keyboard = InlineKeyboardMarkup(
     inline_keyboard=[
         voice_menu_buttons[:2],

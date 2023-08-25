@@ -2,7 +2,6 @@ from telegram import InputFile, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler
 from telegram.constants import ParseMode
 import aiofiles
-import asyncio
 
 from constants import (
     ERROR_VOICE_MENU_TEXT,
@@ -16,7 +15,7 @@ from constants import (
 from constants import StoryTypesButtonsText
 from keyboards import main_menu_keyboard, voice_inline_keyboard
 from keyboards import MAIN_MENU_KEY, VOICE_KEY
-
+from typing import Callable
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
@@ -24,7 +23,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     Args:
         update (Update): Объект обновления, где в том числе хранится информация о пользователе
-        context (ContextTypes.DEFAULT_TYPE): контекст бота
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
     """
 
     await context.bot.send_message(
@@ -42,6 +44,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 
 async def get_selfi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Получить последнее селфи
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=ABOUT_SELFI_TEXT,
@@ -63,6 +75,16 @@ async def get_selfi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 
 async def get_photo_high_school(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Получить фото из старшей школы
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=ABOUT_HIGH_SCHOOL_PHOTO_TEXT,
@@ -83,6 +105,16 @@ async def get_photo_high_school(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def get_bot_git_repo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Получить ссылку на гит-репозиторий данного бота
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=LINK_BOT_REPOSITORY_TEXT,
@@ -93,15 +125,46 @@ async def get_bot_git_repo(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 async def get_info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Выслать меню голосовых сообщений(войсов)
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     await update.message.reply_text("Выберите голосовое сообщение", reply_markup=voice_inline_keyboard)
     return VOICE_KEY
 
 
-def get_voice_story(type_story: str) -> str:
+def get_voice_story(type_story: str) -> Callable:
+    """Замыкание для get_one_voice_story
+
+    Args:
+        type_story (str): выбранное для колбэка название голосового сообщения
+
+    Returns:
+        Callable: функция обработчик запроса
+    """
+
     async def get_one_voice_story(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+        """ Получить голосовое сообщение.
+        Если было выслано гс ранее, то оно будет удалено.
+
+        Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+        Returns:
+            str: ключ состояния
+        """
+
         query = update.callback_query
         await query.answer()
 
+        # Выбор файла с голосовым сообщением
         bot_answer_filename: str = "./files"
         bot_answer_text = ""
         match type_story:
@@ -138,6 +201,18 @@ def get_voice_story(type_story: str) -> str:
 
 
 async def back_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Закрыть меню голосовых сообщений.
+    Удаляет данные о высланных сообщений.
+    Изменяет данные о меню (подписывает голосовое сообщение)
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     query = update.callback_query
     await query.answer()
     await query.edit_message_text(text=context.user_data.get('type_voice', "..."), reply_markup=None)
@@ -155,6 +230,16 @@ async def back_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 async def error_voice_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Обработка ошибочных сообщений в меню пользователя.
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=ERROR_VOICE_MENU_TEXT,
@@ -165,6 +250,16 @@ async def error_voice_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 async def get_hobby_post(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """ Получить пост о хобби
+
+    Args:
+        update (Update): Объект обновления, где в том числе хранится информация о пользователе
+        context (ContextTypes.DEFAULT_TYPE): контекст бота (чата)
+
+    Returns:
+        str: ключ состояния
+    """
+
     # Отправка голосового сообщения
     async with aiofiles.open("files/hobby.png", 'rb') as fl:
         await context.bot.send_photo(

@@ -38,17 +38,21 @@ def main() -> None:
     - различные другие компоненты, значения в которых также устанавливаются по-умолчанию.
     '''
 
+    # Создаем персистентный слой для хранения состояний и данных пользователей в файле
     persistence = PicklePersistence(filepath="bot_about_me")
     application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
 
+    # Получаем логгер
     logger = logging.getLogger(__name__)
     logger.info("Hello, I'm work!")
 
-
+    # Обработчик состояний на основе ConversatioinHandler
     conv_handler = ConversationHandler(
         # Вход в разговор
         entry_points=[CommandHandler('start', start)],
+        # Состояния диалога
         states={
+            # Обработчки в основной меню
             MAIN_MENU_KEY: [
                     MessageHandler(get_selfi_filter, get_selfi),
                     MessageHandler(get_photo_high_school_filter, get_photo_high_school),
@@ -56,6 +60,7 @@ def main() -> None:
                     MessageHandler(get_info_filter, get_info),
                     MessageHandler(get_hobby_post_filter, get_hobby_post)
                 ],
+            # Обработчки меню голосовых сообщений(войсов) встроенной клавиатуры
             VOICE_KEY: [
                 CallbackQueryHandler(
                     get_voice_story(StoryTypesButtonsText.LOVE),
@@ -76,12 +81,12 @@ def main() -> None:
                 MessageHandler(all_text_filter, error_voice_menu)
             ]
             },
-        fallbacks=[],
-        name="general_conversation",
-        persistent = True,
+        fallbacks=[], # Точки выхода
+        name="general_conversation", # Имя (используется в перситентном слое)
+        persistent = True, # Персисетный слой включен
     )
 
-    # Прикрепляем наш обработчик к приложению
+    # Прикрепляем наш обработчик к приложению и запускаем его
     application.add_handler(conv_handler)
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
